@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshGlow Care • Natural Safai, Natural Khubsurti</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&amp;family=Playfair+Display:wght@600&amp;display=swap');
+        
+        :root {
+            --accent-green: 134 239 172;
+        }
+
+        .tailwind-loaded * {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #f8fafc 0%, #ecfdf5 100%);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: rgb(16 185 129);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgb(16 185 129);
+        }
+
+        .modal {
+            animation: modalPop 0.4s ease forwards;
+        }
+
+        @keyframes modalPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .leaf-bg {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(134, 239, 172, 0.15) 1px, transparent 0),
+                radial-gradient(circle at 75% 75%, rgba(134, 239, 172, 0.15) 1px, transparent 0);
+            background-size: 60px 60px;
+        }
+
+        .star {
+            color: rgb(245 158 11);
+        }
+
+        .page {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .cart-slide {
+            animation: slideInRight 0.4s ease forwards;
+        }
+
+        .success-toast {
+            animation: toastPop 0.5s ease forwards;
+        }
+
+        .floating-leaf {
+            position: absolute;
+            font-size: 18px;
+            color: rgb(134 239 172);
+            opacity: 0.15;
+            pointer-events: none;
+            animation: floatLeaf 25s linear infinite;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="tailwind-loaded bg-zinc-50 text-zinc-900">
+    
+    <!-- TOP BAR -->
+    <div class="bg-emerald-700 text-white py-1.5 text-xs font-medium">
+        <div class="max-w-screen-xl mx-auto px-6 flex items-center justify-between text-[10px]">
+            <div class="flex items-center gap-x-6">
+                <div class="flex items-center gap-x-1.5">
+                    <i class="fa-solid fa-leaf text-emerald-300"></i>
+                    <span>A Brand by Faheem Rao</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-x-5 text-xs">
+                <a href="#" onclick="showWhatsApp()" 
+                   class="flex items-center gap-x-1 hover:text-emerald-200">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>Chat on WhatsApp</span>
+                </a>
+                <div class="h-3 w-px bg-emerald-400"></div>
+                <span class="flex items-center gap-x-1">
+                    <i class="fa-solid fa-truck-fast text-emerald-300"></i>
+                    <span>COD Available Across Pakistan</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="bg-white border-b border-zinc-100 sticky top-0 z-50">
+        <div class="max-w-screen-xl mx-auto">
+            <div class="px-6 py-5 flex items-center justify-between">
+                <!-- Logo -->
+                <div onclick="showPage('home-page')" 
+                     class="flex items-center gap-x-2 cursor-pointer">
+                    <div class="w-9 h-9 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-lg shadow-inner">
+                        🌿
+                    </div>
+                    <div>
+                        <span class="font-bold tracking-tighter text-3xl text-emerald-700">FreshGlow</span>
+                    </div>
+                </div>
+
+                <!-- Menu -->
+                <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                    <a onclick="showPage('home-page')" 
+                       class="nav-link cursor-pointer text-zinc-600 hover:text-emerald-700">Home</a>
+                    <a onclick="showPage('shop-page')" 
+                       class="nav-link cursor-pointer text-zinc-600 hover:text-emerald-700">Shop</a>
+                    <a onclick="showPage('about-page')" 
+                       class="nav-link cursor-pointer text-zinc-600 hover:text-emerald-700">About</a>
+                    <a onclick="showPage('contact-page')" 
+                       class="nav-link cursor-pointer text-zinc-600 hover:text-emerald-700">Contact</a>
+                </div>
+
+                <div class="flex items-center gap-x-6">
+                    <!-- Search -->
+                    <div onclick="toggleSearch()" 
+                         class="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-emerald-600 cursor-pointer">
+                        <i id="search-icon" class="fa-solid fa-magnifying-glass text-lg"></i>
+                    </div>
+
+                    <!-- Cart -->
+                    <div onclick="showCartModal()" 
+                         class="relative flex items-center justify-center cursor-pointer">
+                        <i class="fa-solid fa-cart-shopping text-xl text-zinc-700"></i>
+                        <span id="cart-count" 
+                              class="absolute -top-1 -right-1 bg-emerald-500 text-white text-[10px] font-mono w-5 h-5 flex items-center justify-center text-xs rounded-full text-center leading-none pt-px">0</span>
+                    </div>
+
+                    <!-- Account -->
+                    <div onclick="fakeLogin()" 
+                         class="w-8 h-8 bg-zinc-100 hover:bg-zinc-200 transition-colors rounded-2xl flex items-center justify-center cursor-pointer">
+                        <i class="fa-regular fa-user text-zinc-600"></i>
+                    </div>
+
+                    <!-- Mobile menu -->
+                    <button id="mobile-menu-btn"
+                            class="md:hidden w-8 h-8 flex items-center justify-center text-zinc-700">
+                        <i id="mobile-icon" class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBILE MENU -->
+        <div id="mobile-menu" class="hidden md:hidden max-w-screen-xl mx-auto bg-white border-t">
+            <div class="px-6 py-4 flex flex-col gap-y-3 text-sm">
+                <a onclick="mobileNavClick('home-page')" 
+                   class="py-2 px-4 hover:bg-emerald-50 rounded-3xl">Home</a>
+                <a onclick="mobileNavClick('shop-page')" 
+                   class="py-2 px-4 hover:bg-emerald-50 rounded-3xl">Shop</a>
+                <a onclick="mobileNavClick('about-page')" 
+                   class="py-2 px-4 hover:bg-emerald-50 rounded-3xl">About Us</a>
+                <a onclick="mobileNavClick('contact-page')" 
+                   class="py-2 px-4 hover:bg-emerald-50 rounded-3xl">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SEARCH OVERLAY -->
+    <div id="search-overlay" 
+         class="hidden fixed inset-0 bg-black/60 z-[9999] flex items-start justify-center pt-24">
+        <div class="bg-white w-full max-w-lg mx-4 rounded-3xl shadow-2xl overflow-hidden">
+            <div class="p-4 border-b flex items-center gap-x-3">
+                <i class="fa-solid fa-magnifying-glass text-emerald-500"></i>
+                <input id="search-input" 
+                       type="text" 
+                       placeholder="Search neem soap, shampoos..." 
+                       class="flex-1 outline-none text-sm placeholder:text-zinc-400"
+                       onkeyup="if(event.key === 'Enter') searchProducts()">
+                <button onclick="toggleSearch()" 
+                        class="text-zinc-400 hover:text-zinc-500">
+                    ✕
+                </button>
+            </div>
+            <div id="search-results" 
+                 class="max-h-[320px] overflow-auto p-2 text-sm"></div>
+        </div>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div id="home-page" class="page">
+        <!-- HERO -->
+        <div class="hero-bg pt-8 pb-16">
+            <div class="max-w-screen-xl mx-auto px-6">
+                <div class="grid md:grid-cols-12 gap-12 items-center">
+                    <div class="md:col-span-7">
+                        <div class="inline-flex items-center gap-x-2 bg-white shadow text-emerald-700 text-xs font-semibold px-4 py-2 rounded-3xl mb-6">
+                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                            100% NATURAL • PAKISTAN MADE
+                        </div>
+                        
+                        <h1 class="text-6xl md:text-7xl font-semibold tracking-tighter leading-none mb-4">
+                            Natural <span class="text-emerald-600">Safai</span>,<br>
+                            Natural <span class="text-emerald-600">Khubsurti</span>
+                        </h1>
+                        
+                        <p class="text-xl text-zinc-600 max-w-md mb-10">
+                            Pure herbal soaps and shampoos crafted with love in Pakistan. 
+                            Gentle on skin, kind to nature.
+                        </p>
+                        
+                        <div class="flex items-center gap-x-4">
+                            <button onclick="showPage('shop-page')" 
+                                    class="bg-emerald-600 hover:bg-emerald-700 transition-all text-white px-8 py-4 rounded-3xl font-semibold flex items-center gap-x-3 shadow-lg shadow-emerald-200">
+                                <span>Shop Now</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                            
+                            <button onclick="showVideoModal()" 
+                                    class="flex items-center gap-x-2 text-sm font-medium">
+                                <div class="w-9 h-9 rounded-2xl border border-emerald-300 flex items-center justify-center">
+                                    <i class="fa-solid fa-play text-emerald-500 text-xs"></i>
+                                </div>
+                                <span class="text-zinc-500">Watch 45s story</span>
+                            </button>
+                        </div>
+                        
+                        <div class="mt-16 flex items-center gap-x-8 text-xs">
+                            <div class="flex -space-x-4">
+                                <div class="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-[10px] border-2 border-white">🌱</div>
+                                <div class="w-6 h-6 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center text-[10px] border-2 border-white">🧼</div>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-emerald-700">4.98</span> 
+                                <span class="text-zinc-500">(1,284 happy customers)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hero visual -->
+                    <div class="md:col-span-5 relative">
+                        <div class="bg-white rounded-3xl shadow-xl p-5 max-w-xs ml-auto">
+                            <div class="aspect-square bg-gradient-to-br from-emerald-400 to-teal-300 rounded-3xl flex items-center justify-center text-7xl mb-6 relative overflow-hidden">
+                                🧼
+                                <div class="absolute -top-4 -right-4 bg-white text-emerald-600 text-xs font-bold px-3 py-1 rounded-3xl shadow rotate-12">NEW</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="font-semibold">Neem Glow Soap</div>
+                                <div class="text-emerald-600 text-sm">Rs. 150 • Best Seller</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating leaves -->
+                        <div class="floating-leaf text-4xl top-12 left-12" style="animation-delay: 0s;">🍃</div>
+                        <div class="floating-leaf text-3xl bottom-20 right-8" style="animation-delay: 8s;">🌿</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRUST BAR -->
+        <div class="max-w-screen-xl mx-auto px-6 py-8">
+            <div class="grid grid-cols-3 md:grid-cols-6 gap-8 text-center text-xs">
+                <div class="flex flex-col items-center gap-y-2">
+                    <div class="text-emerald-500">
+                        <i class="fa-solid fa-leaf text-2xl"></i>
+                    </div>
+                    <div class="font-semibold">100% Natural</div>
+                </div>
+                <div class="flex flex-col items-center gap-y-2">
+                    <div class="text-emerald-500">
+                        <i class="fa-solid fa-flask text-2xl"></i>
+                    </div>
+                    <div class="font-semibold">Chemical Free</div>
+                </div>
+                <div class="flex flex-col items-center gap-y-2">
+                    <div class="text-emerald-500">
+                        <i class="fa-solid fa-shield-halved text-2xl"></i>
+                    </div>
+                    <div class="font-semibold">Dermatologically Tested</div>
+                </div>
+                <div class="flex flex-col items-center gap-y-2">
+                    <div class="text-emerald-500">
+                        <i class="fa-solid fa-truck text-2xl"></i>
+                    </div>
+                    <div class="font-semibold">Fast Delivery</div>
+                </div>
+                <div class="flex flex-col items-center gap-y-2">
+                    <div class="text-emerald-500">
+                        <i class="fa-solid fa-pakistani-rupee-sign text-2xl"></i>
+                    </div>
+                    <div class="font-semibold">Cash on Delivery</div>
+                </div>
+                <div class="flex flex-col items-center gap-y-2">
+                    <div class="text-emerald-500">
+                        <i class="fa-solid fa-recycle text-2xl"></i>
+                    </div>
+                    <div class="font-semibold">Eco Packaging</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURED PRODUCTS -->
+        <div class="max-w-screen-xl mx-auto px-6 py-16">
+            <div class="flex items-center justify-between mb-8">
+                <div class="text-2xl font-semibold tracking-tight">Featured Products</div>
+                <button onclick="showPage('shop-page')" 
+                        class="text-sm flex items-center gap-x-2 text-emerald-600 hover:text-emerald-700 font-medium">
+                    <span>Browse all</span> 
+                    <span class="text-lg leading-none">→</span>
+                </button>
+            </div>
+            
+            <div id="featured-grid" 
+                 class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- TESTIMONIALS -->
+        <div class="leaf-bg py-16">
+            <div class="max-w-screen-xl mx-auto px-6">
+                <div class="text-center mb-10">
+                    <span class="px-4 py-1.5 bg-white shadow text-emerald-700 text-xs font-semibold rounded-3xl">Real Stories</span>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-3xl shadow">
+                        <div class="flex gap-x-1 mb-4 text-yellow-400 text-lg">★★★★☆</div>
+                        <p class="text-zinc-600 text-sm">"Neem soap cleared my acne in 10 days. My skin feels so fresh every morning!"</p>
+                        <div class="mt-8 flex items-center gap-x-3">
+                            <div class="w-8 h-8 bg-orange-100 text-orange-500 rounded-2xl flex items-center justify-center text-xs font-bold">AS</div>
+                            <div>
+                                <div class="font-medium text-sm">Ayesha S.</div>
+                                <div class="text-xs text-zinc-500">Karachi • Verified Buyer</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow">
+                        <div class="flex gap-x-1 mb-4 text-yellow-400 text-lg">★★★★★</div>
+                        <p class="text-zinc-600 text-sm">"The Amla shampoo made my hair so soft and stopped dandruff completely. Thank you FreshGlow!"</p>
+                        <div class="mt-8 flex items-center gap-x-3">
+                            <div class="w-8 h-8 bg-purple-100 text-purple-500 rounded-2xl flex items-center justify-center text-xs font-bold">MH</div>
+                            <div>
+                                <div class="font-medium text-sm">Muhammad Hassan</div>
+                                <div class="text-xs text-zinc-500">Lahore • Verified Buyer</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow">
+                        <div class="flex gap-x-1 mb-4 text-yellow-400 text-lg">★★★★☆</div>
+                        <p class="text-zinc-600 text-sm">"Rose soap smells heavenly and keeps skin moisturized all day. Will buy again!"</p>
+                        <div class="mt-8 flex items-center gap-x-3">
+                            <div class="w-8 h-8 bg-pink-100 text-pink-500 rounded-2xl flex items-center justify-center text-xs font-bold">FR</div>
+                            <div>
+                                <div class="font-medium text-sm">Fatima Raza</div>
+                                <div class="text-xs text-zinc-500">Islamabad • Verified Buyer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHOP PAGE -->
+    <div id="shop-page" class="page hidden max-w-screen-xl mx-auto px-6 py-12">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Filters -->
+            <div class="md:w-64 flex-shrink-0">
+                <div class="sticky top-24">
+                    <div class="font-semibold mb-4 flex items-center gap-x-2">
+                        <span>Categories</span>
+                    </div>
+                    
+                    <div onclick="filterCategory(this, 'all')" 
+                         class="category-filter active flex items-center gap-x-3 px-4 py-3 hover:bg-emerald-50 rounded-3xl cursor-pointer mb-1 bg-emerald-50 text-emerald-700">
+                        <span class="text-lg">🌐</span>
+                        <span class="font-medium">All Products</span>
+                    </div>
+                    
+                    <div onclick="filterCategory(this, 'herbal-soap')" 
+                         class="category-filter flex items-center gap-x-3 px-4 py-3 hover:bg-emerald-50 rounded-3xl cursor-pointer mb-1">
+                        <span class="text-lg">🧼</span>
+                        <span class="font-medium">Herbal Soaps</span>
+                    </div>
+                    
+                    <div onclick="filterCategory(this, 'beauty-soap')" 
+                         class="category-filter flex items-center gap-x-3 px-4 py-3 hover:bg-emerald-50 rounded-3xl cursor-pointer mb-1">
+                        <span class="text-lg">🌹</span>
+                        <span class="font-medium">Beauty Soaps</span>
+                    </div>
+                    
+                    <div onclick="filterCategory(this, 'shampoo')" 
+                         class="category-filter flex items-center gap-x-3 px-4 py-3 hover:bg-emerald-50 rounded-3xl cursor-pointer">
+                        <span class="text-lg">🧴</span>
+                        <span class="font-medium">Shampoos</span>
+                    </div>
+                    
+                    <div class="h-px bg-zinc-100 my-8"></div>
+                    
+                    <div class="text-xs uppercase tracking-widest font-medium mb-3 text-zinc-500">Price</div>
+                    <div class="flex gap-x-3 text-xs">
+                        <div class="bg-white border border-zinc-200 px-4 py-2 rounded-3xl cursor-pointer hover:border-emerald-300">Under 200</div>
+                        <div class="bg-white border border-zinc-200 px-4 py-2 rounded-3xl cursor-pointer hover:border-emerald-300">200 - 400</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products Grid -->
+            <div class="flex-1">
+                <div id="shop-grid" 
+                     class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- JS populated -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div id="about-page" class="page hidden">
+        <div class="max-w-screen-xl mx-auto px-6 py-16">
+            <div class="grid md:grid-cols-12 gap-16 items-center">
+                <div class="md:col-span-7">
+                    <span class="text-emerald-600 font-semibold text-sm tracking-[1px]">OUR STORY</span>
+                    <h2 class="text-5xl font-semibold tracking-tighter mt-2 mb-8">About FreshGlow Care</h2>
+                    
+                    <div class="prose text-zinc-600">
+                        <p class="text-lg">Founded by Faheem Rao in 2024, FreshGlow Care was born from a simple belief: personal care products should be natural, affordable, and accessible to every Pakistani household.</p>
+                        
+                        <div class="my-10 grid grid-cols-2 gap-8">
+                            <div>
+                                <div class="font-semibold text-emerald-700 mb-2 flex items-center gap-x-2">
+                                    <span class="text-xl">🌱</span> 
+                                    <span>Mission</span>
+                                </div>
+                                <p class="text-sm">To provide premium quality natural hygiene products at prices everyone can afford.</p>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-emerald-700 mb-2 flex items-center gap-x-2">
+                                    <span class="text-xl">👁️</span> 
+                                    <span>Vision</span>
+                                </div>
+                                <p class="text-sm">To become Pakistan's most trusted name in natural personal care.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border border-emerald-100 rounded-3xl p-6 flex gap-5">
+                            <div class="flex-shrink-0">
+                                <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl">👨‍💼</div>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Faheem Rao</div>
+                                <div class="text-xs text-zinc-500 mb-3">Founder &amp; CEO</div>
+                                <p class="text-sm">"I started FreshGlow after struggling to find affordable natural soaps for my family. Every product we make is something I would give to my own children."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Founder visual -->
+                <div class="md:col-span-5">
+                    <div class="bg-white rounded-3xl p-8 shadow">
+                        <div class="aspect-video bg-zinc-100 rounded-3xl flex items-center justify-center mb-8 text-8xl">
+                            🧔🏻‍♂️
+                        </div>
+                        <div class="text-center">
+                            <div class="inline-flex bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-3xl text-[10px]">Founder</div>
+                            <div class="font-semibold mt-4">Faheem Rao</div>
+                            <div class="text-zinc-500 text-sm">Passionate about natural wellness since 2018</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contact-page" class="page hidden max-w-screen-xl mx-auto px-6 py-16">
+        <div class="grid md:grid-cols-12 gap-16">
+            <div class="md:col-span-7">
+                <span class="uppercase text-xs font-semibold text-emerald-600">Get in touch</span>
+                <h2 class="text-4xl font-semibold tracking-tighter mt-2">We'd love to hear from you</h2>
+                
+                <form id="contact-form" onsubmit="handleContactSubmit(event)" 
+                      class="mt-10 space-y-6">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-medium mb-1.5">Your name</label>
+                            <input type="text" id="form-name" 
+                                   class="w-full bg-white border border-zinc-200 focus:border-emerald-300 outline-none rounded-3xl px-5 py-4 text-sm" 
+                                   placeholder="Faheem Ahmed" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-1.5">Email address</label>
+                            <input type="email" id="form-email" 
+                                   class="w-full bg-white border border-zinc-200 focus:border-emerald-300 outline-none rounded-3xl px-5 py-4 text-sm" 
+                                   placeholder="you@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-medium mb-1.5">Message</label>
+                        <textarea id="form-message" rows="4"
+                                  class="w-full bg-white border border-zinc-200 focus:border-emerald-300 outline-none rounded-3xl px-5 py-4 text-sm resize-none" 
+                                  placeholder="I would like to know more about your herbal shampoos..."></textarea>
+                    </div>
+                    
+                    <button type="submit"
+                            class="bg-emerald-600 text-white px-10 py-4 rounded-3xl font-medium flex items-center gap-x-3 hover:shadow-xl">
+                        <span>Send Message</span>
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="md:col-span-5 space-y-8">
+                <div class="bg-white rounded-3xl p-7 shadow">
+                    <div class="flex items-center gap-x-4">
+                        <div class="text-3xl">📍</div>
+                        <div>
+                            <div class="font-medium">Head Office</div>
+                            <div class="text-sm text-zinc-500">Lahore, Punjab, Pakistan</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div onclick="showWhatsApp()" 
+                     class="bg-white hover:bg-emerald-50 transition-colors cursor-pointer rounded-3xl p-7 shadow flex items-center gap-x-4">
+                    <div class="text-emerald-500 text-3xl">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div>
+                        <div class="font-medium">WhatsApp Support</div>
+                        <div class="text-sm text-emerald-600">+92 300 1234567</div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-x-4 text-sm">
+                    <div class="flex-1 h-px bg-zinc-200"></div>
+                    <span class="text-zinc-400 font-medium">OR</span>
+                    <div class="flex-1 h-px bg-zinc-200"></div>
+                </div>
+                
+                <div class="text-xs space-y-4">
+                    <div class="flex gap-x-3">
+                        <span class="font-medium w-20">Email</span>
+                        <a href="mailto:hello@freshglowcare.com" 
+                           class="text-emerald-600 hover:underline">hello@freshglowcare.com</a>
+                    </div>
+                    <div class="flex gap-x-3">
+                        <span class="font-medium w-20">Phone</span>
+                        <span class="text-zinc-700">042-111-345-678</span>
+                    </div>
+                </div>
+                
+                <!-- Fake map -->
+                <div class="h-48 bg-zinc-100 rounded-3xl flex items-center justify-center text-xs overflow-hidden relative">
+                    <div class="text-center">
+                        <div class="mx-auto w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center mb-2 text-xs">📍</div>
+                        <div class="font-medium">FreshGlow Care HQ</div>
+                        <div class="text-zinc-400 text-xs">Gulberg, Lahore</div>
+                    </div>
+                    <div class="absolute bottom-4 right-4 bg-white text-[10px] px-3 py-1 rounded-3xl shadow text-emerald-600 flex items-center gap-x-1 text-xs">
+                        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span>
+                        OPEN
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT MODAL -->
+    <div onclick="if(event.target.id === 'product-modal') this.classList.add('hidden')" 
+         id="product-modal"
+         class="hidden fixed inset-0 bg-black/70 z-[10000] flex items-center justify-center p-4">
+        <div class="modal bg-white max-w-2xl w-full rounded-3xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="px-6 pt-6 flex items-center justify-between border-b pb-4">
+                <div id="modal-product-name" 
+                     class="font-semibold text-xl"></div>
+                <button onclick="this.closest('#product-modal').classList.add('hidden')" 
+                        class="text-zinc-300 hover:text-zinc-400 text-3xl leading-none">×</button>
+            </div>
+            
+            <div class="flex-1 overflow-auto p-6" id="modal-content">
+                <!-- JS populated -->
+            </div>
+            
+            <div class="p-6 border-t flex items-center gap-x-3">
+                <button onclick="addCurrentProductToCart()" 
+                        class="flex-1 bg-emerald-600 text-white h-12 rounded-3xl font-medium flex items-center justify-center gap-x-2 active:scale-95">
+                    <i class="fa-solid fa-cart-plus"></i>
+                    <span>Add to Cart - <span id="modal-price"></span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART MODAL -->
+    <div onclick="if(event.target.id === 'cart-modal') this.classList.add('hidden')" 
+         id="cart-modal"
+         class="hidden fixed inset-0 bg-black/60 z-[11000] flex items-end md:items-center justify-center">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="cart-slide bg-white w-full max-w-lg md:rounded-3xl md:shadow-2xl max-h-[90vh] flex flex-col">
+            <div class="px-6 py-5 border-b flex items-center justify-between">
+                <div class="font-semibold flex items-center gap-x-2">
+                    <span>Your Cart</span> 
+                    <span id="cart-modal-count" 
+                          class="text-xs bg-zinc-100 text-zinc-500 font-mono px-2 py-0.5 rounded text-[10px]"></span>
+                </div>
+                <button onclick="this.closest('#cart-modal').classList.add('hidden')" 
+                        class="text-3xl text-zinc-300">×</button>
+            </div>
+            
+            <div id="cart-items" 
+                 class="flex-1 overflow-auto p-6 space-y-6 text-sm">
+                <!-- JS populated -->
+            </div>
+            
+            <div class="p-6 border-t bg-zinc-50">
+                <div class="flex justify-between text-sm mb-4">
+                    <span class="text-zinc-500">Subtotal</span>
+                    <span id="cart-subtotal" class="font-semibold">Rs. 0</span>
+                </div>
+                <button onclick="checkout()" 
+                        class="w-full h-12 bg-black text-white rounded-3xl text-sm font-semibold active:scale-[0.97]">
+                    PROCEED TO CHECKOUT (COD AVAILABLE)
+                </button>
+                <div class="text-center text-[10px] text-zinc-400 mt-4">or 4 interest-free payments of Rs. XXX with</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUCCESS TOAST -->
+    <div id="success-toast" 
+         class="hidden fixed bottom-6 right-6 bg-emerald-600 text-white shadow-2xl text-sm px-5 py-3 rounded-3xl flex items-center gap-x-3 success-toast">
+        <span id="toast-text" class="font-medium"></span>
+    </div>
+
+    <footer class="bg-zinc-900 text-zinc-400 py-16">
+        <div class="max-w-screen-xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-y-10">
+                <div>
+                    <div class="flex items-center gap-x-2 text-white mb-4">
+                        <span class="text-xl">🌿</span>
+                        <span class="font-bold tracking-tighter text-2xl">FreshGlow</span>
+                    </div>
+                    <p class="text-xs leading-relaxed">Natural personal care for the whole family.<br>Made with love in Pakistan.</p>
+                </div>
+                <div>
+                    <div class="text-xs font-semibold text-zinc-300 mb-4">SHOP</div>
+                    <div class="space-y-2 text-xs">
+                        <div class="cursor-pointer hover:text-white">Herbal Soaps</div>
+                        <div class="cursor-pointer hover:text-white">Beauty Soaps</div>
+                        <div class="cursor-pointer hover:text-white">Herbal Shampoos</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-xs font-semibold text-zinc-300 mb-4">EXPLORE</div>
+                    <div class="space-y-2 text-xs">
+                        <div onclick="showPage('about-page')" class="cursor-pointer hover:text-white">Our Story</div>
+                        <div onclick="showPage('contact-page')" class="cursor-pointer hover:text-white">Contact Us</div>
+                        <div class="cursor-pointer hover:text-white">Ingredients</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-xs font-semibold text-zinc-300 mb-4">CONNECT</div>
+                    <div class="flex gap-x-4 text-lg">
+                        <i onclick="fakeSocial('instagram')" 
+                           class="fa-brands fa-instagram hover:text-pink-400 cursor-pointer"></i>
+                        <i onclick="fakeSocial('facebook')" 
+                           class="fa-brands fa-facebook hover:text-blue-400 cursor-pointer"></i>
+                        <i onclick="fakeSocial('tiktok')" 
+                           class="fa-brands fa-tiktok hover:text-zinc-200 cursor-pointer"></i>
+                    </div>
+                </div>
+                <div class="col-span-2 md:col-span-1">
+                    <div class="bg-zinc-800 rounded-3xl p-5 text-xs">
+                        <div class="font-medium text-white mb-2">Newsletter</div>
+                        <div class="text-xs text-zinc-400">Monthly tips on natural skincare + 10% off your first order</div>
+                        <div class="mt-6 flex">
+                            <input type="text" id="newsletter-input" 
+                                   placeholder="your@email.com" 
+                                   class="bg-zinc-900 border border-zinc-700 text-xs outline-none flex-1 px-4 rounded-l-3xl">
+                            <button onclick="subscribeNewsletter()" 
+                                    class="bg-white text-emerald-700 text-xs font-semibold px-6 rounded-r-3xl">JOIN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-[10px] mt-20 pt-8 border-t border-zinc-800 flex flex-col md:flex-row justify-between items-center gap-y-3 text-center md:text-left">
+                <div>© 2026 FreshGlow Care – All Rights Reserved</div>
+                <div class="flex items-center gap-x-5 text-xs">
+                    <div class="flex items-center gap-x-1">
+                        <span class="text-emerald-400">🧼</span> 
+                        <span>Handcrafted</span>
+                    </div>
+                    <div>Made for Pakistan ❤️</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tailwind already loaded via CDN
+        console.log('%c✅ FreshGlow Care website ready. Natural beauty awaits! 🌿', 'font-family:monospace;color:#10b981;font-size:10px')
+        
+        // Products database
+        let products = [
+            {
+                id: 1,
+                name: "Neem & Turmeric Soap",
+                category: "herbal-soap",
+                price: 150,
+                emoji: "🧼",
+                rating: 4.9,
+                badge: "BESTSELLER",
+                desc: "Antibacterial and purifying soap that clears acne and brightens skin.",
+                ingredients: ["Neem Extract", "Organic Turmeric", "Aloe Vera", "Coconut Oil"],
+                benefits: ["Fights acne", "Reduces inflammation", "Natural antiseptic"],
+                howTo: "Apply on wet skin, massage gently for 30 seconds, rinse thoroughly.",
+                color: "emerald"
+            },
+            {
+                id: 2,
+                name: "Rose & Honey Beauty Soap",
+                category: "beauty-soap",
+                price: 180,
+                emoji: "🌹",
+                rating: 4.7,
+                badge: "",
+                desc: "Delicate floral soap that moisturizes and leaves skin glowing.",
+                ingredients: ["Rose Petals", "Raw Honey", "Vitamin E", "Shea Butter"],
+                benefits: ["Deep hydration", "Natural fragrance", "Softens skin"],
+                howTo: "Lather between palms and apply to face and body. Rinse well.",
+                color: "pink"
+            },
+            {
+                id: 3,
+                name: "Amla & Shikakai Shampoo",
+                category: "shampoo",
+                price: 350,
+                emoji: "🧴",
+                rating: 4.8,
+                badge: "NEW",
+                desc: "Strengthens hair roots and adds natural shine without chemicals.",
+                ingredients: ["Amla Powder", "Shikakai", "Bhringraj", "Coconut Milk"],
+                benefits: ["Prevents hair fall", "Promotes growth", "Conditions naturally"],
+                howTo: "Apply to wet hair, massage scalp for 2 minutes, rinse.",
+                color: "amber"
+            },
+            {
+                id: 4,
+                name: "Tea Tree Anti-Dandruff Shampoo",
+                category: "shampoo",
+                price: 420,
+                emoji: "🧴",
+                rating: 5,
+                badge: "",
+                desc: "Soothes itchy scalp and controls dandruff with powerful tea tree.",
+                ingredients: ["Tea Tree Oil", "Neem", "Mint Extract", "Rosemary"],
+                benefits: ["Eliminates dandruff", "Cools scalp", "Antifungal"],
+                howTo: "Massage into scalp, leave for 3 minutes, rinse with cool water.",
+                color: "teal"
+            },
+            {
+                id: 5,
+                name: "Sandalwood Herbal Soap",
+                category: "herbal-soap",
+                price: 165,
+                emoji: "🧼",
+                rating: 4.6,
+                badge: "",
+                desc: "Calming and cooling soap perfect for sensitive skin.",
+                ingredients: ["Sandalwood", "Saffron", "Glycerin", "Almond Oil"],
+                benefits: ["Cooling effect", "Anti-aging", "Calms irritation"],
+                howTo: "Use daily during bath or shower.",
+                color: "orange"
+            },
+            {
+                id: 6,
+                name: "Lavender Glow Beauty Bar",
+                category: "beauty-soap",
+                price: 195,
+                emoji: "🌸",
+                rating: 4.4,
+                badge: "",
+                desc: "Relaxing lavender soap that helps you unwind after a long day.",
+                ingredients: ["Lavender Essential Oil", "Oatmeal", "Cocoa Butter"],
+                benefits: ["Calming aroma", "Gentle exfoliation", "Moisturizing"],
+                howTo: "Lather and apply to skin. Best used before bedtime.",
+                color: "violet"
+            }
+        ]
+        
+        let cart = []
+        let currentProduct = null
+        
+        // Render featured products (home)
+        function renderFeatured() {
+            const container = document.getElementById("featured-grid")
+            container.innerHTML = ""
+            
+            // Show only first 4
+            const featuredProducts = products.slice(0, 4)
+            
+            featuredProducts.forEach(product => {
+                const cardHTML = `
+                    <div onclick="openProductModal(${product.id})" 
+                         class="product-card bg-white border border-transparent hover:border-emerald-200 rounded-3xl overflow-hidden cursor-pointer">
+                        <div class="h-40 bg-gradient-to-br from-${product.color}-100 to-white flex items-center justify-center text-6xl">
+                            ${product.emoji}
+                        </div>
+                        <div class="p-4">
+                            ${product.badge ? `
+                            <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-px rounded text-xs font-medium">${product.badge}</span>` : ''}
+                            <div class="font-medium text-base mt-2 line-clamp-2">${product.name}</div>
+                            <div class="flex justify-between items-end mt-4">
+                                <div>
+                                    <span class="text-xs text-zinc-400">Rs.</span>
+                                    <span class="font-semibold">${product.price}</span>
+                                </div>
+                                <div class="flex items-center text-yellow-400 text-xs">
+                                    ★ <span class="text-zinc-400 ml-1">${product.rating}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+                container.innerHTML += cardHTML
+            })
+        }
+        
+        // Render full shop grid
+        function renderShopGrid(filteredProducts) {
+            const container = document.getElementById("shop-grid")
+            container.innerHTML = ""
+            
+            filteredProducts.forEach(product => {
+                const cardHTML = `
+                    <div class="product-card bg-white border border-transparent hover:border-emerald-200 rounded-3xl overflow-hidden cursor-pointer">
+                        <div onclick="openProductModal(${product.id}); event.stopImmediatePropagation()" 
+                             class="h-44 bg-gradient-to-br from-${product.color}-100 to-white flex items-center justify-center text-7xl relative">
+                            ${product.emoji}
+                            ${product.badge ? `
+                            <div class="absolute top-4 right-4 text-[10px] bg-white shadow text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-3xl">${product.badge}</div>` : ''}
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-between">
+                                <span class="font-semibold">${product.name}</span>
+                            </div>
+                            <div class="text-xs text-zinc-400 mt-px">${product.category.replace('-', ' ')}</div>
+                            
+                            <div class="flex justify-between mt-6 items-center">
+                                <div class="flex items-center">
+                                    <span class="text-emerald-600 font-semibold">Rs. ${product.price}</span>
+                                </div>
+                                
+                                <button onclick="quickAddToCart(${product.id}); event.stopImmediatePropagation()" 
+                                        class="text-xs bg-zinc-900 hover:bg-black transition-colors text-white px-5 py-2 rounded-3xl flex items-center gap-x-1">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>`
+                container.innerHTML += cardHTML
+            })
+        }
+        
+        // Open product modal
+        function openProductModal(id) {
+            currentProduct = products.find(p => p.id === id)
+            if (!currentProduct) return
+            
+            const modal = document.getElementById("product-modal")
+            const contentContainer = document.getElementById("modal-content")
+            
+            let ingredientsHTML = ""
+            currentProduct.ingredients.forEach(ing => {
+                ingredientsHTML += `<span class="inline-block bg-zinc-100 text-zinc-700 text-xs px-3 py-1 rounded-3xl">${ing}</span>`
+            })
+            
+            let benefitsHTML = `<ul class="list-none space-y-3">`
+            currentProduct.benefits.forEach(benefit => {
+                benefitsHTML += `
+                    <li class="flex items-start gap-x-2 text-sm">
+                        <span class="text-emerald-400 mt-px">→</span>
+                        <span>${benefit}</span>
+                    </li>`
+            })
+            benefitsHTML += `</ul>`
+            
+            contentContainer.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-8">
+                    <!-- Left visual -->
+                    <div class="md:w-1/2">
+                        <div class="aspect-square bg-gradient-to-br from-${currentProduct.color}-100 to-white rounded-3xl flex items-center justify-center text-8xl shadow-inner">
+                            ${currentProduct.emoji}
+                        </div>
+                    </div>
+                    
+                    <!-- Right info -->
+                    <div class="flex-1">
+                        <div class="flex items-center gap-x-2 text-xs">
+                            <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-3xl">${currentProduct.category.toUpperCase().replace('-', ' ')}</span>
+                        </div>
+                        
+                        <div class="text-emerald-600 font-medium mt-8 text-xs flex items-center gap-x-2">
+                            <span class="flex">★★★★</span> 
+                            <span class="text-zinc-400">${currentProduct.rating}</span>
+                        </div>
+                        
+                        <p class="text-zinc-600 mt-3 leading-snug">${currentProduct.desc}</p>
+                        
+                        <div class="mt-8">
+                            <div class="text-xs uppercase font-semibold tracking-widest mb-3">Key Ingredients</div>
+                            <div class="flex flex-wrap gap-2">
+                                ${ingredientsHTML}
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <div class="text-xs uppercase font-semibold tracking-widest mb-3">Benefits</div>
+                            ${benefitsHTML}
+                        </div>
+                        
+                        <div class="mt-8 pt-8 border-t">
+                            <div class="text-xs uppercase font-semibold tracking-widest mb-2">How to use</div>
+                            <p class="text-xs text-zinc-500">${currentProduct.howTo}</p>
+                        </div>
+                    </div>
+                </div>`
+            
+            // Price in footer
+            document.getElementById("modal-price").textContent = `Rs. ${currentProduct.price}`
+            document.getElementById("modal-product-name").textContent = currentProduct.name
+            
+            modal.classList.remove("hidden")
+            modal.classList.add("flex")
+        }
+        
+        function addCurrentProductToCart() {
+            if (!currentProduct) return
+            addToCart(currentProduct.id)
+            document.getElementById("product-modal").classList.add("hidden")
+        }
+        
+        // Quick add from shop
+        function quickAddToCart(id) {
+            event.stopImmediatePropagation()
+            addToCart(id)
+        }
+        
+        function addToCart(id) {
+            const product = products.find(p => p.id === id)
+            if (!product) return
+            
+            // Check if already in cart
+            const existing = cart.find(item => item.id === product.id)
+            
+            if (existing) {
+                existing.quantity = (existing.quantity || 1) + 1
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1
+                })
+            }
+            
+            updateCartCount()
+            showToast(`✅ ${product.name} added to cart`, 2400)
+        }
+        
+        function updateCartCount() {
+            let count = 0
+            cart.forEach(item => {
+                count += item.quantity || 1
+            })
+            document.getElementById("cart-count").textContent = count
+        }
+        
+        // Render cart items
+        function renderCart() {
+            const container = document.getElementById("cart-items")
+            container.innerHTML = ""
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-12 text-center">
+                        <div class="text-4xl mb-4 text-zinc-200">🛒</div>
+                        <div class="font-medium text-zinc-400">Cart is empty</div>
+                        <button onclick="document.getElementById('cart-modal').classList.add('hidden');showPage('shop-page')" 
+                                class="mt-8 text-xs bg-white border text-emerald-700 px-6 py-3 rounded-3xl">Browse products</button>
+                    </div>`
+                return
+            }
+            
+            let subtotal = 0
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * (item.quantity || 1)
+                subtotal += itemTotal
+                
+                const row = document.createElement("div")
+                row.className = "flex gap-4"
+                row.innerHTML = `
+                    <div class="w-12 h-12 bg-zinc-100 text-3xl flex-shrink-0 rounded-2xl flex items-center justify-center">${item.emoji}</div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm">${item.name}</div>
+                        <div class="text-xs text-zinc-400">Rs. ${item.price} × ${item.quantity || 1}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-semibold text-sm">Rs. ${itemTotal}</div>
+                        <div onclick="changeCartQuantity(${index}, -1)" 
+                             class="text-xs text-zinc-400 cursor-pointer mt-3 hover:text-red-400">–</div>
+                    </div>`
+                container.appendChild(row)
+                
+                // Separator
+                if (index < cart.length - 1) {
+                    const sep = document.createElement("div")
+                    sep.className = "h-px bg-zinc-100 my-6"
+                    container.appendChild(sep)
+                }
+            })
+            
+            document.getElementById("cart-subtotal").textContent = `Rs. ${subtotal}`
+            document.getElementById("cart-modal-count").textContent = cart.length
+        }
+        
+        function changeCartQuantity(index, change) {
+            if (!cart[index]) return
+            cart[index].quantity = (cart[index].quantity || 1) + change
+            
+            if (cart[index].quantity < 1) {
+                cart.splice(index, 1)
+            }
+            
+            updateCartCount()
+            renderCart()
+        }
+        
+        function showCartModal() {
+            const modal = document.getElementById("cart-modal")
+            renderCart()
+            modal.classList.remove("hidden")
+            modal.classList.add("flex")
+        }
+        
+        // Category filter
+        let currentFilter = "all"
+        
+        function filterCategory(el, category) {
+            // Remove active from all
+            document.querySelectorAll(".category-filter").forEach(filter => {
+                filter.classList.remove("active", "bg-emerald-50", "text-emerald-700")
+            })
+            
+            // Add to clicked
+            el.classList.add("active", "bg-emerald-50", "text-emerald-700")
+            
+            currentFilter = category
+            
+            let filtered = products
+            
+            if (category !== "all") {
+                filtered = products.filter(p => p.category === category)
+            }
+            
+            renderShopGrid(filtered)
+        }
+        
+        // Show specific page
+        function showPage(pageId) {
+            document.querySelectorAll(".page").forEach(page => {
+                page.classList.add("hidden")
+            })
+            const target = document.getElementById(pageId)
+            if (target) target.classList.remove("hidden")
+            
+            // Close mobile menu if open
+            document.getElementById("mobile-menu").classList.add("hidden")
+        }
+        
+        // Mobile nav
+        function mobileNavClick(pageId) {
+            showPage(pageId)
+        }
+        
+        // Fake login
+        function fakeLogin() {
+            showToast("👋 Welcome back! (Demo)", 2000)
+        }
+        
+        // Toast
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById("success-toast")
+            const toastText = document.getElementById("toast-text")
+            toastText.innerHTML = message
+            toast.classList.remove("hidden")
+            toast.style.transform = 'translateY(10px)'
+            toast.style.opacity = '0'
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                toast.style.transform = 'translateY(0)'
+                toast.style.opacity = '1'
+            }, 10)
+            
+            // Hide
+            setTimeout(() => {
+                toast.style.transitionDuration = '400ms'
+                toast.style.opacity = '0'
+                toast.style.transform = 'translateY(15px)'
+                
+                setTimeout(() => {
+                    toast.classList.add("hidden")
+                    toast.style.transitionDuration = '150ms'
+                    toast.style.transform = 'translateY(0)'
+                    toast.style.opacity = '1'
+                }, 400)
+            }, duration)
+        }
+        
+        // Contact form
+        function handleContactSubmit(e) {
+            e.preventDefault()
+            showToast("🎉 Thank you! We'll reply within 24 hours.", 4200)
+            e.target.reset()
+        }
+        
+        // Newsletter
+        function subscribeNewsletter() {
+            const input = document.getElementById("newsletter-input")
+            if (input.value.trim() !== "") {
+                showToast("📬 Thank you for subscribing!", 2800)
+                input.value = ""
+            }
+        }
+        
+        // WhatsApp
+        function showWhatsApp() {
+            showToast("📱 Opening WhatsApp... +92 300 1234567", 2500)
+        }
+        
+        // Fake checkout
+        function checkout() {
+            if (cart.length === 0) return
+            showToast(`
+                <span class="flex items-center gap-x-2">
+                    <i class="fa-solid fa-circle-check"></i> 
+                    Thank you! Your order has been placed (COD)
+                </span>
+            `, 4500)
+            
+            // Clear cart
+            setTimeout(() => {
+                cart = []
+                updateCartCount()
+                document.getElementById("cart-modal").classList.add("hidden")
+            }, 1800)
+        }
+        
+        // Search
+        function toggleSearch() {
+            const overlay = document.getElementById("search-overlay")
+            overlay.classList.toggle("hidden")
+            
+            if (!overlay.classList.contains("hidden")) {
+                setTimeout(() => {
+                    document.getElementById("search-input").focus()
+                }, 400)
+            }
+        }
+        
+        function searchProducts() {
+            const term = document.getElementById("search-input").value.toLowerCase().trim()
+            if (!term) {
+                document.getElementById("search-results").innerHTML = ""
+                return
+            }
+            
+            const results = products.filter(product => 
+                product.name.toLowerCase().includes(term) ||
+                product.desc.toLowerCase().includes(term) ||
+                product.ingredients.some(i => i.toLowerCase().includes(term))
+            )
+            
+            const container = document.getElementById("search-results")
+            container.innerHTML = ""
+            
+            if (results.length === 0) {
+                container.innerHTML = `<div class="p-6 text-xs text-zinc-400 text-center">No products found for <span class="font-medium">'${term}'</span></div>`
+                return
+            }
+            
+            results.forEach(product => {
+                const div = document.createElement("div")
+                div.className = "px-4 py-3 hover:bg-zinc-50 rounded-2xl flex items-center gap-x-3 cursor-pointer"
+                div.innerHTML = `
+                    <span class="text-3xl">${product.emoji}</span>
+                    <div class="flex-1">
+                        <div class="text-sm">${product.name}</div>
+                        <div class="text-xs text-zinc-400">Rs. ${product.price}</div>
+                    </div>`
+                div.onclick = () => {
+                    toggleSearch()
+                    setTimeout(() => {
+                        openProductModal(product.id)
+                    }, 450)
+                }
+                container.appendChild(div)
+            })
+        }
+        
+        // Fake video modal (demo)
+        function showVideoModal() {
+            showToast(`
+                <span>📹 In a real site this would open a video modal explaining our natural process 🌱</span>
+            `, 3800)
+        }
+        
+        function fakeSocial(network) {
+            showToast(`🔗 Following us on ${network} (demo)`, 1600)
+        }
+        
+        // Mobile menu toggle
+        function initMobileMenu() {
+            const btn = document.getElementById("mobile-menu-btn")
+            const menu = document.getElementById("mobile-menu")
+            const icon = document.getElementById("mobile-icon")
+            
+            btn.addEventListener("click", () => {
+                if (menu.classList.contains("hidden")) {
+                    menu.classList.remove("hidden")
+                    icon.classList.remove("fa-bars")
+                    icon.classList.add("fa-xmark")
+                } else {
+                    menu.classList.add("hidden")
+                    icon.classList.add("fa-bars")
+                    icon.classList.remove("fa-xmark")
+                }
+            })
+        }
+        
+        // Keyboard escape support
+        function initKeyboard() {
+            document.addEventListener("keydown", function(e) {
+                if (e.key === "Escape") {
+                    const productModal = document.getElementById("product-modal")
+                    const cartModal = document.getElementById("cart-modal")
+                    const searchOverlay = document.getElementById("search-overlay")
+                    
+                    if (!productModal.classList.contains("hidden")) {
+                        productModal.classList.add("hidden")
+                    } else if (!cartModal.classList.contains("hidden")) {
+                        cartModal.classList.add("hidden")
+                    } else if (!searchOverlay.classList.contains("hidden")) {
+                        searchOverlay.classList.add("hidden")
+                    }
+                }
+            })
+        }
+        
+        // Initialize everything
+        function initializeApp() {
+            // Tailwind already active
+            renderFeatured()
+            renderShopGrid(products)   // default shows all
+            
+            // Cart count
+            updateCartCount()
+            
+            // Mobile menu
+            initMobileMenu()
+            
+            // Keyboard shortcuts
+            initKeyboard()
+            
+            // Make sure home is visible
+            document.getElementById("home-page").classList.remove("hidden")
+        }
+        
+        // Boot the app
+        window.onload = initializeApp
+    </script>
+</body>
+</html>
